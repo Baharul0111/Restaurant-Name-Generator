@@ -1,10 +1,14 @@
+import os
 import streamlit as st
 from langchain.llms import OpenAI
 from langchain.prompts import PromptTemplate
 from langchain.chains import LLMChain, SequentialChain
 
-# Fetch the OpenAI API key from Streamlit secrets
-openai_api_key = st.secrets["openapi_key"]
+openai_api_key = os.getenv("OPENAI_API_KEY")
+
+if not openai_api_key:
+    st.error("OPENAI_API_KEY environment variable not set.")
+    st.stop()
 
 def generate_restaurant_name_and_items(cuisine):
     llm = OpenAI(temperature=0.7, openai_api_key=openai_api_key)
